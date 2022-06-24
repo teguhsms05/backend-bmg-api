@@ -1,15 +1,14 @@
 import os, re, random, string, requests
 from datetime import datetime, timedelta
 import jwt
-import fnmatch
 from functools import wraps
 from flask import Flask, jsonify, request, make_response
-from flask_caching import Cache
+#from flask_caching import Cache
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_restful import Resource, Api
 from flask_cors import CORS
-#from decouple import config
+from decouple import config
 
 app = Flask(__name__)
 
@@ -19,15 +18,14 @@ api = Api(app)
 # inisiasi object flask cors
 CORS(app)
 
-app.config['SECRET_KEY'] = 'ab0534175bdf5a6a0cbbdb41c9239bc6'
-app.config.from_object('config.Config')
-#app.config['SQLALCHEMY_DATABASE_URI'] = config('DATABASE_URL')
+app.config['SECRET_KEY'] = config('SECRET_KEY')
 #app.config['SQLALCHEMY_DATABASE_URI'] =  'postgresql://postgres:postgres@db-container-bmg:5432/pg_backend'
 app.config['SQLALCHEMY_DATABASE_URI'] = config('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-cache = Cache(app)
+#cache = Cache(app)
+app.config["CACHE_TYPE"] = "null"
 
 # inisiasi class models
 from models import *
@@ -81,12 +79,14 @@ class Players(Resource):
             "data" : players
         }
 
+        return response, 200
+
     def post(self): 
         body        = request.get_json()
         uname       = body['username']
         passwd      = body['password']
         name        = body['name']
-        mail        = body['email']
+        email       = body['email']
         ref_code    = body['referral_code']
 
         #generate random referral code
@@ -96,9 +96,9 @@ class Players(Resource):
         #hashed password account
         hashed_password = generate_password_hash(passwd, method='sha256')
 
-        if(re.fullmatch(regex_mail, mail)):
+        if(re.fullmatch(regex_mail, email)):
             #checking for existing user by email
-            if db.session.query(db.exists().where(Account.mail == mail)).scalar():
+            if db.session.query(db.exists().where(Account.email == email)).scalar():
                 return "invalid field information"
             #generate public_id
             gencode = ''.join(random.choices(string.ascii_uppercase + string.digits, k = 20))    
@@ -107,7 +107,7 @@ class Players(Resource):
                 uname=uname, 
                 passwd=hashed_password, 
                 name=name, 
-                mail=mail, 
+                email=email, 
                 ref_code=ref_code
             )
             account.save()
@@ -129,5 +129,5 @@ class Players(Resource):
 api.add_resource(Players, "/api", methods=["GET", "POST"])
 
 if __name__ == "__main__":
-    #app.run(debug=True, host="0.0.0.0", port=5000)
-    app.run(debug=True, port=5005)
+    app.run(debug=True, host="0.0.0.0", port=5000)
+    #app.run(debug=True, port=5005)

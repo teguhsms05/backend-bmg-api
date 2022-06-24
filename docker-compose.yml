@@ -5,13 +5,13 @@ services:
     container_name: backend-bmg-api
     image: backend-bmg-api
     build: .
-    command: gunicorn main:app --bind 0.0.0.0:5000
+    command: gunicorn app:app --bind 0.0.0.0:5005
     env_file:
       - .env
     ports:
-      - "5000:5000"
-    environment:
-      - DATABASE_URL=postgresql://jxbatqylfrecor:86178c55586376122b6cb21ba60094724b419b74f33ed8a45e35d6048161940a@ec2-54-157-16-196.compute-1.amazonaws.com:5432/d7vn051bb1qcg6
+      - "5005:5005"
+    # environment:
+    #   - DATABASE_URL=postgresql://jxbatqylfrecor:86178c55586376122b6cb21ba60094724b419b74f33ed8a45e35d6048161940a@ec2-54-157-16-196.compute-1.amazonaws.com:5432/d7vn051bb1qcg6
     # depends_on:
     #   - db
   

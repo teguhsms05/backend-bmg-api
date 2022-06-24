@@ -11,12 +11,12 @@ class Account(db.Model):
     email        = db.Column(db.String, unique=True, nullable=False)
     ref_code    = db.Column(db.String)
     
-    def __init__(self, public_id, uname, passwd, name, mail, ref_code):
+    def __init__(self, public_id, uname, passwd, name, email, ref_code):
         self.public_id = public_id
         self.uname = uname
         self.passwd = passwd
         self.name = name
-        self.mail = mail
+        self.email = email
         self.ref_code = ref_code
 
     # membuat mothod untuk menyimpan data agar lebih simple
