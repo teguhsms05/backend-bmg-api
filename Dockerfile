@@ -1,13 +1,18 @@
 FROM python:3.9.7
 
+#Set the working directory
 WORKDIR /app
 
-COPY requirements.txt /app
+# install dependencies
+RUN pip install --upgrade pip
+COPY ./requirements.txt /app
+RUN pip install -r requirements.txt
 
-RUN pip install -r requirements.txt --no-cache-dir
-
+# copy project
 COPY ./src .
 
-# EXPOSE 5000
+#Expose the required port
+EXPOSE 5000
 
-#CMD ["flask", "run", "--host=0.0.0.0", "--port=5000"]
+#Run the command
+CMD gunicorn main:app

@@ -2,18 +2,18 @@ version: '3'
 
 services:
   api:
-    container_name: flask-container-bmg
-    image: flask-container-bmg
+    container_name: backend-bmg-api
+    image: backend-bmg-api
     build: .
-    entrypoint: python app.py
+    command: gunicorn main:app --bind 0.0.0.0:5000
     env_file:
       - .env
     ports:
       - "5000:5000"
     environment:
-      - DATABASE_URL=postgresql://postgres:postgres@db-container-bmg:5432/pg_backend
-    depends_on:
-      - db
+      - DATABASE_URL=postgresql://jxbatqylfrecor:86178c55586376122b6cb21ba60094724b419b74f33ed8a45e35d6048161940a@ec2-54-157-16-196.compute-1.amazonaws.com:5432/d7vn051bb1qcg6
+    # depends_on:
+    #   - db
   
   redis:
     image: redis
@@ -21,17 +21,17 @@ services:
     ports:
       - "6379:6379"
 
-  db:
-    container_name: db-container-bmg
-    image: postgres:12
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=pg_backend
-    volumes:
-      - pgdata:/var/lib/postgresql/data
+#   db:
+#     container_name: db-container-bmg
+#     image: postgres:12
+#     ports:
+#       - "5432:5432"
+#     environment:
+#       - POSTGRES_PASSWORD=postgres
+#       - POSTGRES_USER=postgres
+#       - POSTGRES_DB=pg_backend
+#     volumes:
+#       - pgdata:/var/lib/postgresql/data
 
-volumes:
-  pgdata: {}
+# volumes:
+#   pgdata: {}
