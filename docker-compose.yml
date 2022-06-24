@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  api:
+    container_name: flask-container-bmg
+    image: flask-container-bmg
+    build: .
+    entrypoint: python app.py
+    env_file:
+      - .env
+    ports:
+      - "5000:5000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db-container-bmg:5432/pg_backend
+    depends_on:
+      - db
+  
+  redis:
+    image: redis
+    container_name: redis-container-bmg
+    ports:
+      - "6379:6379"
+
+  db:
+    container_name: db-container-bmg
+    image: postgres:12
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=pg_backend
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata: {}
