@@ -8,7 +8,7 @@ class Account(db.Model):
     uname       = db.Column(db.String, unique=True, nullable=False)
     passwd      = db.Column(db.String, nullable=False)
     name        =  db.Column(db.String, nullable=False)
-    mail        = db.Column(db.String, unique=True, nullable=False)
+    email        = db.Column(db.String, unique=True, nullable=False)
     ref_code    = db.Column(db.String)
     
     def __init__(self, public_id, uname, passwd, name, mail, ref_code):
@@ -18,3 +18,12 @@ class Account(db.Model):
         self.name = name
         self.mail = mail
         self.ref_code = ref_code
+
+    # membuat mothod untuk menyimpan data agar lebih simple
+    def save(self):
+        try:
+            db.session.add(self)
+            db.session.commit()
+            return True
+        except:
+            return False
