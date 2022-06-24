@@ -1,1 +1,1 @@
-api: gunicorn app:app --reload --workers 2
+web: gunicorn src/app:app --reload --workers 2
