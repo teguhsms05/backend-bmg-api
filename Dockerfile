@@ -1,3 +1,4 @@
+#Create a ubuntu base image with python 3 installed.
 FROM python:3.9.7
 
 #Set the working directory
@@ -12,7 +13,7 @@ RUN pip install -r requirements.txt
 COPY . .
 
 #Expose the required port
-EXPOSE 5000
+EXPOSE 5005
 
 #Run the command
-CMD gunicorn app:app
+CMD gunicorn main:app
