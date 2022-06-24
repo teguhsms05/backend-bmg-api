@@ -9,10 +9,10 @@ COPY ./requirements.txt /app
 RUN pip install -r requirements.txt
 
 # copy project
-COPY ./src .
+COPY . .
 
 #Expose the required port
 EXPOSE 5000
 
 #Run the command
-CMD gunicorn main:app
+CMD gunicorn app:app
