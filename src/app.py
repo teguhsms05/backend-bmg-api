@@ -124,6 +124,11 @@ class Players(Resource):
         else:
             return "invalid field information"
 
+@app.route('/')
+def hello_world():
+    statement = 'Hello World!'
+    return statement
+
 # inisialisasi url / api 
 # testing
 api.add_resource(Players, "/api", methods=["GET", "POST"])
